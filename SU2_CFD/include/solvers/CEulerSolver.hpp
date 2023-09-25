@@ -520,13 +520,13 @@ public:
  /*!
   * bem-vlad
   */
-  void BC_ActDisk_BEM(CGeometry *geometry,
-                  CSolver **solver_container,
-                  CNumerics *conv_numerics,
-                  CNumerics *visc_numerics,
-                  CConfig *config,
-                  unsigned short val_marker,
-                  bool val_inlet_surface);
+//  void BC_ActDisk_BEM(CGeometry *geometry,
+//                  CSolver **solver_container,
+//                  CNumerics *conv_numerics,
+//                  CNumerics *visc_numerics,
+//                  CConfig *config,
+//                  unsigned short val_marker,
+//                  bool val_inlet_surface);
 
   /*!
    * \brief Impose an actuator disk with variable load boundary condition.
@@ -1059,7 +1059,7 @@ public:
     return ActDisk_ZCG[val_marker][val_vertex];
   }
 
- virtual void GenActDiskData_BEM(CGeometry *geometry, CSolver **solver_container,CConfig *config, unsigned short iMesh, dpropeller_geom_struct s_prop, dpropeller_section_struct &sprop_sec, bool Output);
+// virtual void GenActDiskData_BEM(CGeometry *geometry, CSolver **solver_container,CConfig *config, unsigned short iMesh, dpropeller_geom_struct s_prop, dpropeller_section_struct &sprop_sec, bool Output);
 
  virtual void GenActDiskData_BEM_VLAD(CGeometry *geometry, CSolver **solver_container,CConfig *config, unsigned short iMesh, dpropeller_geom_struct s_prop, dpropeller_section_struct &sprop_sec, bool Output);
 
