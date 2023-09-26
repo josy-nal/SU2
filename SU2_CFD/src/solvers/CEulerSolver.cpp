@@ -3580,7 +3580,6 @@ void bem_model_noa(dpropeller_geom_struct s_prop,dpropeller_section_struct *spro
   torque=0.0;
 
 //Main Loop -------------------------------------------------------------
-//  printf("# sec iter    alpha       cl       cd       DtDr      DqDr        a         b       tloss   \n");
   for (j=0; j < NR; j++) 
   {
       b[j]=0.01;
@@ -3638,15 +3637,11 @@ void bem_model_noa(dpropeller_geom_struct s_prop,dpropeller_section_struct *spro
        if (bnew<0.1)
           b[j]=bnew;
       n_iter++ ; 
-//printf("BEMMAXITER=%d\n",BEM_MAX_ITER);
       if (n_iter>BEM_MAX_ITER)
       {
         converged=1;
       }
     }  //  while loop
-
-//    printf("#!%3d %4d %9.4f %9.4f %9.4f %9.2f %9.2f %9.4f %9.4f %9.4f\n", j,n_iter,alpha,cl,cd,DtDr[j],DqDr,a[j],b[j],t_loss);
-
     thrust=thrust+DtDr[j]*delta_r[j];
     torque=torque+DqDr*delta_r[j];
     Dtorq[j] = DqDr;
@@ -3781,11 +3776,10 @@ void CEulerSolver::SetActDisk_BCThrust(CGeometry *geometry, CSolver **solver_con
               strcpy(section_prop_filename,config->GetBEM_prop_filename().c_str());
               readsdata_(section_prop_filename,&s_prop,&sprop_sec);
 	  }
-	  if(InnerIter%40==0){
+	  /* Update the propeller load according to the modified flow field after every 40 inner iterations */
+	  if(InnerIter % 40 == 0){
 	      GenActDiskData_BEM_VLAD(geometry, solver_container, config, iMesh,s_prop,sprop_sec,Output);
 	  }
-	  //if(rank == MASTER_NODE)
-	  //cout<<"exit bladelement"<<endl;
   }
 
   /*--- Variable load distribution is in input file. ---*/
@@ -4411,23 +4405,17 @@ void CEulerSolver::GenActDiskData_BEM_VLAD(CGeometry *geometry, CSolver **solver
   static su2double Target_Press_Jump=0.0, Target_Temp_Jump=0.0,Area=0.0,UnitNormal[3]={0.0},Vn=0.0;
   static su2double Fa=0.0,Ft=0.0,Fr=0.0,Fx=0.0,Fy=0.0,Fz=0.0,dCt_v=0.0,dCp_v=0.0,dCr_v=0.0,rad_v=0.0;
   su2double *V_domain,*Coord;
-//  Original code  21-05-2019-----------------------
-   static su2double loc_Torque = 0.0,tot_Torque = 0.0;
-   static su2double loc_thrust = 0.0,tot_thrust=0.0;
-   static su2double tot_area = 0.0,tot_tq = 0.0;
-   dia   = s_prop.dia; 
+  static su2double loc_Torque = 0.0,tot_Torque = 0.0;
+  static su2double loc_thrust = 0.0,tot_thrust=0.0;
+  static su2double tot_area = 0.0,tot_tq = 0.0;
+  dia   = s_prop.dia; 
   r_hub = s_prop.rhub; 
   r_tip   = 0.5*dia ;
 
   su2double Dens_FreeStream = config->GetDensity_FreeStream();
   const su2double *Vel_FreeStream = config->GetVelocity_FreeStream();
 
-
-
-
-
   su2double *Normal = new su2double[nDim];
-  //printf("entered the function\n");
    for (iMarker = 0; iMarker < config->GetnMarker_All(); iMarker++) {
     if ((config->GetMarker_All_KindBC(iMarker) == ACTDISK_INLET) ||
         (config->GetMarker_All_KindBC(iMarker) == ACTDISK_OUTLET)) {
@@ -4447,23 +4435,19 @@ void CEulerSolver::GenActDiskData_BEM_VLAD(CGeometry *geometry, CSolver **solver
                 Origin[0] = Origin[0]/Lref;
                 Origin[1] = Origin[1]/Lref;
                 Origin[2] = Origin[2]/Lref;
-		//cout<<"diam="<<s_prop.dia<<endl;
 //----------------------------------------------------------------------
-                
-	       
-            /*--- Compute the distance to the center of the rotor ---*/
+      /*--- Compute the distance to the center of the rotor ---*/
 
       geometry->vertex[iMarker][iVertex]->GetNormal(Normal);
       for (iDim = 0; iDim < nDim; iDim++) Normal[iDim] = -Normal[iDim];
-      //conv_numerics->SetNormal(Normal);
+
+      /*Current version works only when propeller axis is aligned to horizontal*/
       AD_Axis[0] = 1.0;
       AD_Axis[1] = 0.0;
       AD_Axis[2] = 0.0;
       for (iDim = 0; iDim < nDim; iDim++){
-                        ActDisk_Axis(iMarker, iDim) = AD_Axis[iDim];
+          ActDisk_Axis(iMarker, iDim) = AD_Axis[iDim];
       }
-
-
       Area = 0.0;
       for (iDim = 0; iDim < nDim; iDim++) Area += Normal[iDim]*Normal[iDim];
       Area = sqrt (Area);
@@ -4482,14 +4466,12 @@ void CEulerSolver::GenActDiskData_BEM_VLAD(CGeometry *geometry, CSolver **solver
 	    }
             radius = sqrt(radius);
       /*--- Current solution at this boundary node and jumps values ---*/
-
-      V_domain = nodes->GetPrimitive(iPoint);
-
+            V_domain = nodes->GetPrimitive(iPoint);
 //---------------------------------------------------------------
             if (abs(Omega_sw) > 1.0e-1) 
             {
                Vn = 0.0; 
-              for (iDim = 0; iDim < nDim; iDim++) {  Vn += V_domain[iDim+1]*UnitNormal[iDim]; }
+               for (iDim = 0; iDim < nDim; iDim++) {  Vn += V_domain[iDim+1]*UnitNormal[iDim]; }
 
                RPM = abs(Omega_RPM);
 	       rps = RPM/60.0;
@@ -4499,51 +4481,45 @@ void CEulerSolver::GenActDiskData_BEM_VLAD(CGeometry *geometry, CSolver **solver
                blade_angle = config->GetBEM_blade_angle(); 
                V = config->GetModVel_FreeStream();
                V = fabs(Vn); 
+               bem_model_noa(s_prop,&sprop_sec,                         // Propeller properties
+                             radius,V,RPM,rho,T,blade_angle,            // Input
+                             deltap_r,&Thrust,&Torque,&dp_av,&dp_at_r); // Output
 
-               bem_model_noa(s_prop,&sprop_sec,  // Propeller properties
-               radius,V,RPM,rho,T,blade_angle,         // Input
-               deltap_r,&Thrust,&Torque,&dp_av,&dp_at_r);// Output
-
-         tot_area  += Area; 
-         loc_Torque  += Torque*Area; 
-         tot_tq  += dp_av;  
-         loc_thrust  += dp_at_r*Area; 
-              Target_Press_Jump = dp_at_r;
-              Target_Temp_Jump  = Target_Press_Jump/(rho*287.0); 
+               tot_area  += Area; 
+               loc_Torque  += Torque*Area; 
+               tot_tq  += dp_av;  
+               loc_thrust  += dp_at_r*Area; 
+               Target_Press_Jump = dp_at_r;
+               Target_Temp_Jump  = Target_Press_Jump/(rho*287.0); 
 	     
-	      ActDisk_DeltaP_r[iMarker][iVertex] = Target_Press_Jump;
-	      ActDisk_Thrust_r[iMarker][iVertex] = dp_at_r;
-	      ActDisk_Torque_r[iMarker][iVertex] = Torque/(2*M_PI*radius);
-	      dCt_v = dp_at_r*(r_tip/(rho*rps*rps*pow(dia,4)));
-	      //dCp_v = Torque*((2*M_PI*r_tip)/(rho*rps*rps*pow(dia,5)));
-	      dCp_v = Torque*((Omega_sw*r_tip)/(rho*rps*rps*rps*pow(dia,5)));
-	      dCr_v = 0.0;
-	      rad_v = radius/r_tip;
-	      //Fa = (dCt_v*(2*Dens_FreeStream*pow(Vel_FreeStream[0],2))/
-              //      (pow(AD_J,2)*PI_NUMBER*rad_v)) / config->GetPressure_Ref();
-	      Fa = dp_at_r;
-	      //Ft = Torque*rps*radius;
-              Ft = (dCp_v*(2*Dens_FreeStream*pow(Vel_FreeStream[0],2))/
+	       ActDisk_DeltaP_r[iMarker][iVertex] = Target_Press_Jump;
+	       ActDisk_Thrust_r[iMarker][iVertex] = dp_at_r;
+	       ActDisk_Torque_r[iMarker][iVertex] = Torque/(2*M_PI*radius);
+	       /* Non-dimensionalize the elemental load */
+	       dCt_v = dp_at_r*(r_tip/(rho*rps*rps*pow(dia,4)));
+	       //dCp_v = Torque*((2*M_PI*r_tip)/(rho*rps*rps*pow(dia,5)));
+	       dCp_v = Torque*((Omega_sw*r_tip)/(rho*rps*rps*rps*pow(dia,5)));
+	       /* Force radial load to 0 as there is no information of radial load from BEM */ 
+	       dCr_v = 0.0;
+	       rad_v = radius/r_tip;
+	       //Fa = (dCt_v*(2*Dens_FreeStream*pow(Vel_FreeStream[0],2))/
+               //      (pow(AD_J,2)*PI_NUMBER*rad_v)) / config->GetPressure_Ref();
+	       Fa = dp_at_r;
+               Ft = (dCp_v*(2*Dens_FreeStream*pow(Vel_FreeStream[0],2))/
                     ((AD_J*PI_NUMBER*rad_v)*(AD_J*PI_NUMBER*rad_v))) / config->GetPressure_Ref();
-              Fr = (dCr_v*(2*Dens_FreeStream*pow(Vel_FreeStream[0],2))/
+               Fr = (dCr_v*(2*Dens_FreeStream*pow(Vel_FreeStream[0],2))/
                     (pow(AD_J,2)*PI_NUMBER*rad_v)) / config->GetPressure_Ref();
-	      Fx = (Ft+Fr)*(radius_[0]/(radius));
-              Fy = (Ft+Fr)*(radius_[2]/(radius));
-              Fz = -(Ft+Fr)*(radius_[1]/(radius));
-	      ActDisk_Fa_BEM[iMarker][iVertex] = Fa;
-              ActDisk_Fx_BEM[iMarker][iVertex] = Fx;
-              ActDisk_Fy_BEM[iMarker][iVertex] = Fy;
-              ActDisk_Fz_BEM[iMarker][iVertex] = Fz;
+	       Fx = (Ft+Fr)*(radius_[0]/(radius));
+               Fy = (Ft+Fr)*(radius_[2]/(radius));
+               Fz = -(Ft+Fr)*(radius_[1]/(radius));
+	       ActDisk_Fa_BEM[iMarker][iVertex] = Fa;
+               ActDisk_Fx_BEM[iMarker][iVertex] = Fx;
+               ActDisk_Fy_BEM[iMarker][iVertex] = Fy;
+               ActDisk_Fz_BEM[iMarker][iVertex] = Fz;
 	     
-
-
             }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------
-
-	    
 	    }
-
     }
    }
   delete [] Normal;
@@ -8844,10 +8820,11 @@ void CEulerSolver::BC_ActDisk_BEM_VLAD(CGeometry *geometry, CSolver **solver_con
    * modified on:
    *
    * Section properties of the propeller given in an input file. 
-   * Cl, cd of propeller sections need to be generated earlier and saved in this file
+   * Cl, Cd of propeller sections need to be generated earlier and saved in this file
    * Actuator disk data initialized in function SetActDisk_BCThrust.
-   * Entropy, acoustic Riemann invariant R+ and  tangential velocity extrapolated  from upstream flow;
-   * acoustic Riemann invariant R- is extrapolated from downstream.
+   * Propeller load calculated with Blade Element Method
+   * Interpolated load at each point on the actuator disk is set in GenActDiskData_BEM_VLAD function 
+   * Rest calculations follows the Variable Load (BC_ActDisk_VariableLoad) approach
    * 
    */
 
