@@ -1,0 +1,34 @@
+The present work is on the modifications to the actuator disk model.
+Variable load actuator disk (VLAD) [Saetta, 2020]
+uses the given blade loading to impose
+axial and tangential jumps at the interface. Propeller loading is
+susceptible to different parameters. Also, blade loading is affected with
+the surrounding structures and angle of attack (AoA).
+A method that updates the blade loading
+at run time is required to take care of the interactions and installation
+effects. Blade element method (BEM) is coupled to the SU2 solver to
+calculate the blade loading recursively. Propeller geometry details,
+airfoil characteristics, propeller speed and set blade angle are required.
+Using the thrust and power along the blade from BEM, and following the
+procedure of VLAD, axial and tangential velocities are imposed at the
+interface. BEM method is verified against the
+experimental results [Veldhuis, 2005] and
+found to be performing well.
+
+This work was presented at
+SU2 Conference 2022,
+5--7 Sept 2022,
+Propeller blade load calculation for actuator disk using blade element method.
+https://www.youtube.com/watch?v=otM_Lz2MV4U
+
+and published in
+International Journal of Aeronautical and Space Sciences
+https://doi.org/10.1007/s42405-023-00593-5
+
+References:
+
+Saetta E, Russo L, Tgnaccini R (2020) Implementation and validation
+of a new actuator disk model in SU2. SU2 conference 2020, virtual event.
+
+Veldhuis L (2005) Propeller-wing aerodynamic interface, Ph.D.
+thesis, Delft University of Technology, Delft, Netherlands
