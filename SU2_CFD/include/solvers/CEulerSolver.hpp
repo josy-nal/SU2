@@ -517,16 +517,6 @@ public:
                   unsigned short val_marker,
                   bool val_inlet_surface) final;
 
- /*!
-  * bem-vlad
-  */
-//  void BC_ActDisk_BEM(CGeometry *geometry,
-//                  CSolver **solver_container,
-//                  CNumerics *conv_numerics,
-//                  CNumerics *visc_numerics,
-//                  CConfig *config,
-//                  unsigned short val_marker,
-//                  bool val_inlet_surface);
 
   /*!
    * \brief Impose an actuator disk with variable load boundary condition.
@@ -558,7 +548,7 @@ public:
                                bool val_inlet_surface);
 
   /*!
-   * \author: G.Gori, S.Vitale, M.Pini, A.Guardone, P.Colonna
+   * \author: Chandukrishna Y., T. N. Venkatesh and Josy Pullockara
    *
    * \brief Impose the boundary condition using characteristic recostruction.
    * \param[in] geometry - Geometrical definition of the problem.
@@ -1058,8 +1048,6 @@ public:
                                      unsigned long val_vertex)  {
     return ActDisk_ZCG[val_marker][val_vertex];
   }
-
-// virtual void GenActDiskData_BEM(CGeometry *geometry, CSolver **solver_container,CConfig *config, unsigned short iMesh, dpropeller_geom_struct s_prop, dpropeller_section_struct &sprop_sec, bool Output);
 
  virtual void GenActDiskData_BEM_VLAD(CGeometry *geometry, CSolver **solver_container,CConfig *config, unsigned short iMesh, dpropeller_geom_struct s_prop, dpropeller_section_struct &sprop_sec, bool Output);
 
