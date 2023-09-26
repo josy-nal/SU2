@@ -1657,8 +1657,8 @@ void CConfig::SetConfig_Options() {
   /* DESCRIPTION: History File Append */
   addBoolOption("HISTORY_FILE_APPEND", History_File_Append_Flag, false);
   /* DESCRIPTION: Propeller_Blade_angle */
-  addDoubleOption("BEM_PROP_BLADE_ANGLE", BEM_blade_angle, 22.5);
-  addStringOption("BEM_PROP_FILENAME", BEM_prop_filename,string("SARAS_MT_Propeller_geom-sec-data.txt"));
+  addDoubleOption("BEM_PROP_BLADE_ANGLE", BEM_blade_angle, 23.9);
+  addStringOption("BEM_PROP_FILENAME", BEM_prop_filename,string("prop_geom_alfclcd_data.txt"));
 
   /* DESCRIPTION: Only half engine is in the computational grid */
   addBoolOption("ENGINE_HALF_MODEL", Engine_HalfModel, false);
