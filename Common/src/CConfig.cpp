@@ -923,6 +923,9 @@ void CConfig::SetPointersNull() {
   ActDiskOutlet_Thrust_BEM = nullptr;
   ActDiskOutlet_Torque_BEM = nullptr;
 
+  ActDiskOutlet_Thrust_BEM = nullptr;
+  ActDiskOutlet_Torque_BEM = nullptr;
+
   ActDisk_DeltaPress      = nullptr;    ActDisk_DeltaTemp      = nullptr;
   ActDisk_TotalPressRatio = nullptr;    ActDisk_TotalTempRatio = nullptr;    ActDisk_StaticPressRatio = nullptr;
   ActDisk_StaticTempRatio = nullptr;    ActDisk_NetThrust      = nullptr;    ActDisk_GrossThrust      = nullptr;
@@ -1528,6 +1531,11 @@ void CConfig::SetConfig_Options() {
                    nMarker_ActDiskInlet, nMarker_ActDiskOutlet,  Marker_ActDiskInlet, Marker_ActDiskOutlet,
                    ActDisk_XCG, ActDisk_YCG, ActDisk_ZCG);
 
+  /*!\brief MARKER_ACTDISK_CG\n DESCRIPTION: Actuator disk with CG for blade element momentum (BEM) method. \ingroup Config*/
+  addActDiskOption("MARKER_ACTDISK_CG",
+                   nMarker_ActDiskInlet, nMarker_ActDiskOutlet,  Marker_ActDiskInlet, Marker_ActDiskOutlet,
+                   ActDisk_XCG, ActDisk_YCG, ActDisk_ZCG);
+
   /*!\brief ACTDISK_FILENAME \n DESCRIPTION: Input file for a specified actuator disk (w/ extension) \n DEFAULT: actdiskinput.dat \ingroup Config*/
   addStringOption("ACTDISK_FILENAME", ActDisk_FileName, string("actdiskinput.dat"));
 
@@ -1654,10 +1662,18 @@ void CConfig::SetConfig_Options() {
   /* DESCRIPTION: Actuator disk double surface */
   addBoolOption("ACTDISK_DOUBLE_SURFACE", ActDisk_DoubleSurface, false);
 
+<<<<<<< HEAD
   /* DESCRIPTION: History File Append */
   addBoolOption("HISTORY_FILE_APPEND", History_File_Append_Flag, false);
   /* DESCRIPTION: Propeller_Blade_angle */
   addDoubleOption("BEM_PROP_BLADE_ANGLE", BEM_blade_angle, 23.9);
+=======
+  /* DESCRIPTION: Actuator disk BEM switch for history file appending.*/
+  addBoolOption("HISTORY_FILE_APPEND", History_File_Append_Flag, false);
+  /* DESCRIPTION: Propeller blade angle for actuator disk BEM.*/
+  addDoubleOption("BEM_PROP_BLADE_ANGLE", BEM_blade_angle, 23.9);
+  /* DESCRIPTION: Propeller file name for actuator disk BEM.*/
+>>>>>>> feature-actuatordisk-bem
   addStringOption("BEM_PROP_FILENAME", BEM_prop_filename,string("prop_geom_alfclcd_data.txt"));
 
   /* DESCRIPTION: Only half engine is in the computational grid */

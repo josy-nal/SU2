@@ -7,9 +7,17 @@ The experimental thrust and power (Non-Dimensional) at J ~ 0.8 are as follows:
 J=Vinf/nD	CT=Thrust/rho*n2*D4	CP=Power/rho*n3*D5
 0.7963	            0.0953	              0.1025
 
+<<<<<<< HEAD
 
 Reference:
 -----------
 Sinnige, T., van Arnhem, N., Stokkermans, T. C. A., Eitelberg, G., Veldhuis, L. L. M., ``Wingtip-Mounted 
+=======
+The dimensional values are Thrust = 16.30 N and Torque = 0.6612 N-m.
+
+Reference:
+-----------
+Sinnige, T., van Arnhem, N., Stokkermans, T. C. A., Eitelberg, G., Veldhuis, L. L. M., ``Wingtip-Mounted
+>>>>>>> feature-actuatordisk-bem
 	    Propellers: Aerodynamic Analysis of Interaction Effects and Comparison with Conventional Layout,''
 	    Journal of Aircraft, 2018.

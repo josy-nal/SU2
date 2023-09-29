@@ -537,7 +537,20 @@ public:
                                bool val_inlet_surface);
 
  /*!
+<<<<<<< HEAD
   * bem-vlad
+=======
+   * \author: Chandukrishna Y., T. N. Venkatesh and Josy P. Pullockara
+   *
+   * \brief Impose an actuator disk with variable load boundary condition using blade element momentum method (BEM).
+   * \param[in] geometry - Geometrical definition of the problem.
+   * \param[in] solver_container - Container vector with all the solutions.
+   * \param[in] conv_numerics - Description of the numerical method.
+   * \param[in] visc_numerics - Description of the numerical method.
+   * \param[in] config - Definition of the particular problem.
+   * \param[in] val_marker - Surface marker where the boundary condition is applied.
+   * \param[in] val_inlet_surface - Boolean for whether val_marker is an inlet
+>>>>>>> feature-actuatordisk-bem
   */
   void BC_ActDisk_BEM_VLAD(CGeometry *geometry,
                                CSolver **solver_container,
