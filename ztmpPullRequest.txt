@@ -1,3 +1,6 @@
+Feature: Blade element momentum (BEM) method for variable load actuator disk modelling of propellers.
+
+## Proposed Changes
 
 The present work is on modifications to the actuator disk model.  Variable load actuator disk (VLAD) [Saetta, 2020] uses the given blade loading (which is fixed for the entire duration of the simulation) to impose axial and tangential jumps at the interface.
 
@@ -5,9 +8,10 @@ Propeller loading depends on many different parameters and is affected by the su
 
 In the present approach, the Blade Element Method (BEM)  is used to calculate the pressure jump and swirl distribtions across the propeller disc and is coupled to the SU2 solver.  The blade loading and changes to the flow-field are calculated recursively. Propeller geometry details, airfoil characteristics, propeller speed and set blade angle are required as inputs.  Using the thrust and power along the blade from BEM, and following the procedure of VLAD, axial and tangential velocities are imposed at the interface. BEM method is verified against the experimental results [Veldhuis, 2005] and found to be performing well.
 
+## Related Work
+
 This work was presented at
-SU2 Conference 2022,
-5--7 Sept 2022,
+SU2 Conference 2022, 5--7 Sept 2022,
 Propeller blade load calculation for actuator disk using blade element method.
 https://www.youtube.com/watch?v=otM_Lz2MV4U
 
@@ -15,10 +19,22 @@ and published in
 International Journal of Aeronautical and Space Sciences
 https://doi.org/10.1007/s42405-023-00593-5
 
+This implementation is under active development seeking reviews and suggestions to meet SU2 code standards.
+
 References:
 
-Saetta E, Russo L, Tgnaccini R (2020) Implementation and validation
-of a new actuator disk model in SU2. SU2 conference 2020, virtual event.
+Saetta E, Russo L, Tgnaccini R (2020)
+Implementation and validation of a new actuator disk model in SU2.
+SU2 conference 2020, virtual event.
 
-Veldhuis L (2005) Propeller-wing aerodynamic interface, Ph.D.
-thesis, Delft University of Technology, Delft, Netherlands
+Veldhuis L (2005) Propeller-wing aerodynamic interface,
+Ph.D. thesis, Delft University of Technology, Delft, Netherlands
+
+## PR Checklist
+
+- [X] I am submitting my contribution to the develop branch.
+- [X] My contribution generates no new compiler warnings (try with --warnlevel=3 when using meson).
+- [ ] My contribution is commented and consistent with SU2 style (https://su2code.github.io/docs_v7/Style-Guide/).
+- [ ] I used the pre-commit hook to prevent dirty commits and used `pre-commit run --all` to format old commits.
+- [X] I have added a test case that demonstrates my contribution, if necessary.
+- [ ] I have updated appropriate documentation (Tutorials, Docs Page, config_template.cpp), if necessary.
