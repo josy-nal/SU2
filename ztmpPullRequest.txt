@@ -19,7 +19,10 @@ and published in
 International Journal of Aeronautical and Space Sciences
 https://doi.org/10.1007/s42405-023-00593-5
 
-This implementation is under active development seeking reviews and suggestions to meet SU2 code standards.
+The grid file for the test case is in the new branch on the fork at
+https://github.com/josy-nal/su2codeTestCases/tree/feature-actuatordisk-bem
+
+This implementation is under active development seeking reviews, instructions and suggestions to meet SU2 code standards.
 
 References:
 
