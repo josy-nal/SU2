@@ -4260,9 +4260,12 @@ void CEulerSolver::SetActDisk_BEM_VLAD(CGeometry *geometry, CSolver **solver_con
           for (iDim = 0; iDim < nDim; iDim++) { Normal[iDim] = -Normal[iDim]; }
 
           /*--- Current version works only when propeller axis is aligned to horizontal. ---*/
-          ADBem_Axis[0] = 1.0;
+          for (iDim=0; iDim < nDim; iDim++){
+            ADBem_Axis[iDim] = config->GetActDisk_Axis_BEM(iDim, Marker_Tag, 0);
+          }
+          /*ADBem_Axis[0] = 1.0;
           ADBem_Axis[1] = 0.0;
-          ADBem_Axis[2] = 0.0;
+          ADBem_Axis[2] = 0.0;*/
           for (iDim = 0; iDim < nDim; iDim++){
             ActDisk_Axis(iMarker, iDim) = ADBem_Axis[iDim];
           }
@@ -8121,12 +8124,12 @@ void CEulerSolver::BC_ActDisk_Inlet(CGeometry *geometry, CSolver **solver_contai
 
   unsigned short Kind_ActDisk = config->GetKind_ActDisk();
 
-  if(Kind_ActDisk == VARIABLE_LOAD){
+  if(Kind_ActDisk == VARIABLE_LOAD || Kind_ActDisk == BLADE_ELEMENT){
     BC_ActDisk_VariableLoad(geometry, solver_container, conv_numerics, visc_numerics, config, val_marker, true);
   }
-  else if(Kind_ActDisk == BLADE_ELEMENT){
+  /*else if(Kind_ActDisk == BLADE_ELEMENT){
     BC_ActDisk_BEM_VLAD(geometry, solver_container, conv_numerics, visc_numerics, config, val_marker, true);
-  }
+  }*/
   else{
     BC_ActDisk(geometry, solver_container, conv_numerics, visc_numerics, config, val_marker, true);
   }
@@ -8138,12 +8141,12 @@ void CEulerSolver::BC_ActDisk_Outlet(CGeometry *geometry, CSolver **solver_conta
 
   unsigned short Kind_ActDisk = config->GetKind_ActDisk();
 
-  if(Kind_ActDisk == VARIABLE_LOAD){
+  if(Kind_ActDisk == VARIABLE_LOAD || Kind_ActDisk == BLADE_ELEMENT){
     BC_ActDisk_VariableLoad(geometry, solver_container, conv_numerics, visc_numerics, config, val_marker, false);
   }
-  else if(Kind_ActDisk == BLADE_ELEMENT){
+  /*else if(Kind_ActDisk == BLADE_ELEMENT){
     BC_ActDisk_BEM_VLAD(geometry, solver_container, conv_numerics, visc_numerics, config, val_marker, false);
-  }
+  }*/
   else{
     BC_ActDisk(geometry, solver_container, conv_numerics, visc_numerics, config, val_marker, false);
   }
@@ -8599,6 +8602,8 @@ void CEulerSolver::BC_ActDisk_VariableLoad(CGeometry *geometry, CSolver **solver
   const auto Gas_Constant = config->GetGas_ConstantND();
   const bool tkeNeeded = (config->GetKind_Turb_Model() == TURB_MODEL::SST);
 
+  unsigned short Kind_ActDisk = config->GetKind_ActDisk();
+
   /*--- Get the actuator disk center and axis coordinates for the current marker. ---*/
   for (iDim = 0; iDim < nDim; iDim++){
     Prop_Axis[iDim] = ActDisk_Axis(val_marker, iDim);
@@ -8633,10 +8638,21 @@ void CEulerSolver::BC_ActDisk_VariableLoad(CGeometry *geometry, CSolver **solver
 
       /*--- Get the values of Fa (axial force per unit area), Fx, Fy and Fz (x, y and z components of the tangential and
             radial forces per unit area resultant). ---*/
-      Fa = ActDisk_Fa[val_marker][iVertex];
-      Fx = ActDisk_Fx[val_marker][iVertex];
-      Fy = ActDisk_Fy[val_marker][iVertex];
-      Fz = ActDisk_Fz[val_marker][iVertex];
+      if(Kind_ActDisk == VARIABLE_LOAD){
+        Fa = ActDisk_Fa[val_marker][iVertex];
+        Fx = ActDisk_Fx[val_marker][iVertex];
+        Fy = ActDisk_Fy[val_marker][iVertex];
+        Fz = ActDisk_Fz[val_marker][iVertex];
+      }
+      else if(Kind_ActDisk == BLADE_ELEMENT){
+        Fa = ActDisk_Fa_BEM[val_marker][iVertex];
+        Fx = ActDisk_Fx_BEM[val_marker][iVertex];
+        Fy = ActDisk_Fy_BEM[val_marker][iVertex];
+        Fz = ActDisk_Fz_BEM[val_marker][iVertex];
+      }
+      else{
+
+      }
 
       /*--- Get the primitive variables and the extrapolated variables. ---*/
       if (val_inlet_surface){
