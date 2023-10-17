@@ -1532,7 +1532,7 @@ void CConfig::SetConfig_Options() {
                    ActDisk_CG[0], ActDisk_CG[1], ActDisk_CG[2]);
 
   /*!\brief MARKER_ACTDISK_CG\n DESCRIPTION: Actuator disk axis for blade element momentum (BEM) method. \ingroup Config*/
-  addActDiskOption("MARKER_ACTDISK_CG",
+  addActDiskOption("MARKER_ACTDISK_AXIS",
                    nMarker_ActDiskInlet, nMarker_ActDiskOutlet,  Marker_ActDiskInlet, Marker_ActDiskOutlet,
                    ActDisk_Axis_BEM[0], ActDisk_Axis_BEM[1], ActDisk_Axis_BEM[2]);
 
