@@ -349,7 +349,10 @@ private:
   su2double **ActDisk_PressJump,
   **ActDisk_TempJump,  **ActDisk_Omega;      /*!< \brief Specified deltas for actuator disk.*/
   su2double **ActDisk_CG[3];                 /*!< \brief Specified CG for actuator disk.*/
+<<<<<<< HEAD
   su2double **ActDisk_Axis_BEM[3];           /*!< \brief Specified axis for actuator disk.*/
+=======
+>>>>>>> 5b678067ec9f660e7d08b278da8b0e244510efb6
   su2double **ActDisk_RotRate;               /*!< \brief Value of the Rotation Rate.*/
   su2double BEM_blade_angle ;                /*!< \brief Propeller blade angle.*/
   string    BEM_prop_filename ;              /*!< \brief Propeller filename.*/
@@ -6663,11 +6666,14 @@ public:
   su2double GetActDisk_CG(unsigned short iDim, string val_marker, unsigned short val_index) const;
 
   /*!
+<<<<<<< HEAD
    * \brief Get the axis of the actuator disk with Blade Element Method.
    */
   su2double GetActDisk_Axis_BEM(unsigned short iDim, string val_marker, unsigned short val_index) const;
 
   /*!
+=======
+>>>>>>> 5b678067ec9f660e7d08b278da8b0e244510efb6
    * \brief Get the blade angle of the propeller.
    */
   su2double GetBEM_blade_angle(void) { return BEM_blade_angle; }

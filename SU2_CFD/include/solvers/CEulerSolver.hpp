@@ -29,7 +29,6 @@
 
 #include "CFVMFlowSolverBase.hpp"
 #include "../variables/CEulerVariable.hpp"
-#include "prop_defs.hpp"
 
 /*!
  * \class CEulerSolver
@@ -70,9 +69,9 @@ protected:
   vector<vector<su2double> > ActDisk_Thrust_r;    /*!< \brief Value of the Delta P. */
   vector<vector<su2double> > ActDisk_Torque_r;    /*!< \brief Value of the Delta P. */
   vector<vector<su2double> > ActDisk_RotRate;    /*!< \brief Value of the Rotation Rate. */
-  vector<vector<su2double> > ActDisk_XCG;
-  vector<vector<su2double> > ActDisk_YCG;
-  vector<vector<su2double> > ActDisk_ZCG;
+//vector<vector<su2double> > ActDisk_XCG;
+//vector<vector<su2double> > ActDisk_YCG;
+//vector<vector<su2double> > ActDisk_ZCG;
   vector<vector<su2double> > ActDisk_DeltaT;  /*!< \brief Value of the Delta T. */
 
   su2activevector
@@ -227,6 +226,17 @@ protected:
    * \param[in] Output - boolean to determine whether to print output.
    */
   void ReadActDisk_InputFile(CGeometry *geometry, CSolver **solver_container,
+                           CConfig *config, unsigned short iMesh, bool Output);
+
+  /*!
+   * \brief Read and update the variable load actuator disk from input file for the BLADE_ELEMENT type.
+   * \param[in] geometry - Geometrical definition of the problem.
+   * \param[in] solver_container - Container vector with all the solutions.
+   * \param[in] config - Definition of the particular problem.
+   * \param[in] iMesh - current mesh level for the multigrid.
+   * \param[in] Output - boolean to determine whether to print output.
+   */
+  void SetActDisk_BEM_VLAD(CGeometry *geometry, CSolver **solver_container,
                            CConfig *config, unsigned short iMesh, bool Output);
 
   /*!
@@ -537,7 +547,16 @@ public:
                                bool val_inlet_surface);
 
  /*!
-  * bem-vlad
+   * \author: Chandukrishna Y., T. N. Venkatesh and Josy P. Pullockara
+   *
+   * \brief Impose an actuator disk with variable load boundary condition using blade element momentum method (BEM).
+   * \param[in] geometry - Geometrical definition of the problem.
+   * \param[in] solver_container - Container vector with all the solutions.
+   * \param[in] conv_numerics - Description of the numerical method.
+   * \param[in] visc_numerics - Description of the numerical method.
+   * \param[in] config - Definition of the particular problem.
+   * \param[in] val_marker - Surface marker where the boundary condition is applied.
+   * \param[in] val_inlet_surface - Boolean for whether val_marker is an inlet
   */
   void BC_ActDisk_BEM_VLAD(CGeometry *geometry,
                                CSolver **solver_container,
@@ -548,7 +567,7 @@ public:
                                bool val_inlet_surface);
 
   /*!
-   * \author: Chandukrishna Y., T. N. Venkatesh and Josy Pullockara
+   * \author: G.Gori, S.Vitale, M.Pini, A.Guardone, P.Colonna
    *
    * \brief Impose the boundary condition using characteristic recostruction.
    * \param[in] geometry - Geometrical definition of the problem.
@@ -1018,38 +1037,36 @@ public:
     DonorGlobalIndex[val_marker][val_vertex] = val_index;
   }
 
-  inline void SetActDisk_XCG(unsigned short val_marker,
-                                unsigned long val_vertex,
-                                su2double val_XCG)  { ActDisk_XCG[val_marker][val_vertex] = val_XCG; }
-  inline void SetActDisk_YCG(unsigned short val_marker,
-                                unsigned long val_vertex,
-                                su2double val_YCG)  { ActDisk_YCG[val_marker][val_vertex] = val_YCG; }
-  inline void SetActDisk_ZCG(unsigned short val_marker,
-                                unsigned long val_vertex,
-                                su2double val_ZCG)  { ActDisk_ZCG[val_marker][val_vertex] = val_ZCG; }
+//inline void SetActDisk_XCG(unsigned short val_marker,
+//                              unsigned long val_vertex,
+//                              su2double val_XCG)  { ActDisk_XCG[val_marker][val_vertex] = val_XCG; }
+//inline void SetActDisk_YCG(unsigned short val_marker,
+//                              unsigned long val_vertex,
+//                              su2double val_YCG)  { ActDisk_YCG[val_marker][val_vertex] = val_YCG; }
+//inline void SetActDisk_ZCG(unsigned short val_marker,
+//                              unsigned long val_vertex,
+//                              su2double val_ZCG)  { ActDisk_ZCG[val_marker][val_vertex] = val_ZCG; }
 
-  inline void SetActDisk_RotRate(unsigned short val_marker,
-                                unsigned long val_vertex,
-                                su2double val_rotrate)  { ActDisk_RotRate[val_marker][val_vertex] = val_rotrate; }
+//inline void SetActDisk_RotRate(unsigned short val_marker,
+//                              unsigned long val_vertex,
+//                              su2double val_rotrate)  { ActDisk_RotRate[val_marker][val_vertex] = val_rotrate; }
 
-  inline su2double GetActDisk_RotRate(unsigned short val_marker,
-                                     unsigned long val_RotRate)  {
-    return ActDisk_RotRate[val_marker][val_RotRate];
-  }
-  inline su2double GetActDisk_CGX(unsigned short val_marker,
-                                     unsigned long val_vertex)  {
-    return ActDisk_XCG[val_marker][val_vertex];
-  }
-  inline su2double GetActDisk_CGY(unsigned short val_marker,
-                                     unsigned long val_vertex)  {
-    return ActDisk_YCG[val_marker][val_vertex];
-  }
-  inline su2double GetActDisk_CGZ(unsigned short val_marker,
-                                     unsigned long val_vertex)  {
-    return ActDisk_ZCG[val_marker][val_vertex];
-  }
-
- virtual void GenActDiskData_BEM_VLAD(CGeometry *geometry, CSolver **solver_container,CConfig *config, unsigned short iMesh, dpropeller_geom_struct s_prop, dpropeller_section_struct &sprop_sec, bool Output);
+//inline su2double GetActDisk_RotRate(unsigned short val_marker,
+//                                   unsigned long val_RotRate)  {
+//  return ActDisk_RotRate[val_marker][val_RotRate];
+//}
+//inline su2double GetActDisk_CGX(unsigned short val_marker,
+//                                   unsigned long val_vertex)  {
+//  return ActDisk_XCG[val_marker][val_vertex];
+//}
+//inline su2double GetActDisk_CGY(unsigned short val_marker,
+//                                   unsigned long val_vertex)  {
+//  return ActDisk_YCG[val_marker][val_vertex];
+//}
+//inline su2double GetActDisk_CGZ(unsigned short val_marker,
+//                                   unsigned long val_vertex)  {
+//  return ActDisk_ZCG[val_marker][val_vertex];
+//}
 
   /*!
    * \brief Update the multi-grid structure for the customized boundary conditions
