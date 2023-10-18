@@ -8643,8 +8643,7 @@ void CEulerSolver::BC_ActDisk_VariableLoad(CGeometry *geometry, CSolver **solver
         Fx = ActDisk_Fx_BEM[val_marker][iVertex];
         Fy = ActDisk_Fy_BEM[val_marker][iVertex];
         Fz = ActDisk_Fz_BEM[val_marker][iVertex];
-      }
-      else { /*--- default (Kind_ActDisk == VARIABLE_LOAD) ---*/
+      } else { /*--- default (Kind_ActDisk == VARIABLE_LOAD) ---*/
         Fa = ActDisk_Fa[val_marker][iVertex];
         Fx = ActDisk_Fx[val_marker][iVertex];
         Fy = ActDisk_Fy[val_marker][iVertex];
