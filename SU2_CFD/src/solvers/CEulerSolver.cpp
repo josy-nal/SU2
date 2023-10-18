@@ -4259,7 +4259,7 @@ void CEulerSolver::SetActDisk_BEM_VLAD(CGeometry *geometry, CSolver **solver_con
           geometry->vertex[iMarker][iVertex]->GetNormal(Normal);
           for (iDim = 0; iDim < nDim; iDim++) { Normal[iDim] = -Normal[iDim]; }
 
-          /*--- Get propeller axis from config file (***IS ALIGNMENT TO HORIZONTAL REQUIRED ANYMORE?***). ---*/
+          /*--- Get propeller axis from config file. ---*/
           //ADBem_Axis[0] = 1.0;
           //ADBem_Axis[1] = 0.0;
           //ADBem_Axis[2] = 0.0;
